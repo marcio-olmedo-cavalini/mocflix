@@ -36,6 +36,10 @@ export const SliderItem = styled.li`
     height: 197px;
     object-fit: cover;
   }
+  &:hover { transform: scale(1.1);
+  -webkit-transform: scale(1.1);
+  -moz-transform: scale(1.1);
+  -ms-transform: scale(1.1); }
 `;
 
 
