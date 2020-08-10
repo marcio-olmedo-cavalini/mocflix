@@ -1,15 +1,48 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import PageDefault from '../../../components/PageDefault';
+import FormField from '../../../components/FormField';
+import Button from '../../../components/Button';
 
 function CadastroCategoria() {
-    const [categorias, setCategorias] = useState(['Teste']);
+    //const [categorias, setCategorias] = useState(['Teste']);
     const valoresIniciais = {
-      nome: 'Categoria Inicial',
-      descricao: 'Descrição Inicial',
-      cor: 'red'
-    }
+      nome: '',
+      descricao: '',
+      cor: ''
+    };
+    const [categorias, setCategorias] = useState([]);
     const [values, setValues] = useState(valoresIniciais);
+    
+    function setValue(chave, valor) {
+      //chave: nome, descricao, qualquer_outro_valor
+      setValues({
+        ...values,
+        [chave]: valor, //nome: 'valor'
+      });
+    }
+
+    function handleChange(infosDoEvento) {
+      setValue(
+        infosDoEvento.target.getAttribute('name'),
+        infosDoEvento.target.value
+      );
+    }
+
+    useEffect(() => {
+      //O que sera feito
+      console.log('ALOW!');
+      const URL = 'http://localhost:8080/categorias';
+      fetch(URL)
+        .then(async (respostaDoServidor) => {
+          const resposta = await respostaDoServidor.json();
+          setCategorias([
+            ...resposta,
+          ]);
+        })
+    },
+      [/* quando sera feito*/]
+    ); 
     
     return (
       <PageDefault>
@@ -22,57 +55,48 @@ function CadastroCategoria() {
             ...categorias,
             values
           ]);
+          setValues(valoresIniciais);
         }}>
-          <div>
-            <label>
-                Nome categoria:
-                <input type="text" 
-                      value={values.nome}
-                      onChange={function funcaoOnChange(infosDoEvento) {
-                        //console.log('[nomeDaCategoria]', nomeDaCategoria);
-                        //console.log('[infosDoEvento.target.value]', infosDoEvento.target.value);
-                        //setNomeDaCategoria(infosDoEvento.target.value);                    
-                      }}
-                />
-            </label>
-          </div>
-          <div>
-            <label>
-                Descrição:
-                <textarea type="text" 
-                      value={values.descricao}
-                      onChange={function funcaoOnChange(infosDoEvento) {
-                        //console.log('[nomeDaCategoria]', nomeDaCategoria);
-                        //console.log('[infosDoEvento.target.value]', infosDoEvento.target.value);
-                        //setNomeDaCategoria(infosDoEvento.target.value);                    
-                      }}
-                />
-            </label>
-          </div>
-          <div>
-            <label>
-                Cor:
-                <input type="color" 
-                      value={values.cor}
-                      onChange={function funcaoOnChange(infosDoEvento) {
-                        //console.log('[nomeDaCategoria]', nomeDaCategoria);
-                        //console.log('[infosDoEvento.target.value]', infosDoEvento.target.value);
-                        //setNomeDaCategoria(infosDoEvento.target.value);                    
-                      }}
-                />
-            </label>
-          </div>
+          <FormField
+            label='Nome da categoria'
+            name='nome'
+            value={values.nome}
+            onChange={handleChange}
+          />
+          
+          <FormField
+            label='Descrição'
+            type='textarea'
+            name='descricao'
+            value={values.descricao}
+            onChange={handleChange}
+          />
 
-          <button>Cadastrar</button>
+          <FormField
+            label='Cor'
+            type='color'
+            name='cor'
+            value={values.cor}
+            onChange={handleChange}
+          />
+          <Button>
+            Cadastrar
+          </Button>
         </form>
 
+        <div>
+          {/* Carregando */}
+          Loading...
+        </div>
+
+//1h 13 min 26 segundos
         <ul>
           {categorias.map((categoria, indice) => {
             return (
-              <li key={`${categoria}${indice}`}>
-                {categoria}
+              <li key={`${categoria.nome}`}>
+                {categoria.nome}
               </li>
-            ) // minuto 39:37
+            )
           })}
         </ul>
         <Link to="/">
