@@ -89,7 +89,6 @@ function CadastroCategoria() {
           Loading...
         </div>
 
-//1h 13 min 26 segundos
         <ul>
           {categorias.map((categoria, indice) => {
             return (
