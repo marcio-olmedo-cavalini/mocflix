@@ -32,7 +32,9 @@ function CadastroCategoria() {
     useEffect(() => {
       //O que sera feito
       console.log('ALOW!');
-      const URL = 'http://localhost:8080/categorias';
+      const URL = window.location.hostname.includes('localhost')
+        ? 'http://localhost:8080/categorias'
+        : 'https://mocflix.herokuapp.com/categorias';
       fetch(URL)
         .then(async (respostaDoServidor) => {
           const resposta = await respostaDoServidor.json();
