@@ -133,4 +133,3 @@ FormField.propTypes = {
 };
 
 export default FormField;
-//Aula 4 - 48:13
